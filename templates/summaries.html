@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Summaries</title>
+</head>
+<body>
+    <h1>Saved Summaries</h1>
+    <table border="1">
+        <tr>
+            <th>File Name</th>
+            <th>Summary</th>
+            <th>Date</th>
+        </tr>
+        {% for summary in summaries %}
+        <tr>
+            <td>{{summary.filename}}</td>
+            <td>{{summary.summary_text[:200]}}...</td>
+            <td>{{summary.created_at.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
