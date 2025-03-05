@@ -1,28 +1,17 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request, send_file, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-=======
-from flask import Flask, render_template, request, send_file, redirect, url_for, session
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 import os
 from dotenv import load_dotenv
 from groq import Groq
 import pdfplumber
 from io import BytesIO
-<<<<<<< HEAD
 from fpdf import FPDF  # Import FPDF for PDF generation
 import tempfile  # For temporary file handling
 
 # Load environment variables
 load_dotenv(override=False)  # Ensures .env is properly reloaded
 API_KEY = os.getenv("GROQ_API_KEY")
-=======
-
-# Load environment variables
-load_dotenv(override=False)  # Ensures .env is properly reloaded
-API_KEY = os.getenv("GROQ_API_KEY_1")
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 
 if not API_KEY or "gsk_" not in API_KEY:
     raise ValueError("❌ Invalid API Key! Check your .env file.")
@@ -31,7 +20,6 @@ if not API_KEY or "gsk_" not in API_KEY:
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-<<<<<<< HEAD
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -49,8 +37,6 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-=======
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
     try:
@@ -97,12 +83,9 @@ def generate_summary(document_content):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-<<<<<<< HEAD
     if 'user' not in session:
         return redirect(url_for('login'))
     
-=======
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
     if request.method == 'POST':
         file = request.files['file']
         if file and file.filename.endswith('.pdf'):
@@ -113,7 +96,6 @@ def index():
             return render_template('index.html', legal_text=document_content, summary=summary)
     return render_template('index.html')
 
-<<<<<<< HEAD
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -145,8 +127,6 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('login'))
 
-=======
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 @app.route('/download', methods=['POST'])
 def download():
     summary = request.form.get('summary', '').strip()  # Ensure we get a valid summary
@@ -157,22 +137,14 @@ def download():
         return "Error: No summary provided.", 400
 
     if file_type == 'txt':
-<<<<<<< HEAD
-        try:
-            # Create a temporary file to store the TXT content
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode='w+', encoding='utf-8') as tmp_file:
-                tmp_file.write(summary)  # Write the summary to the temporary file
-                tmp_file_path = tmp_file.name  # Get the path of the temporary file
-
-            # Send the temporary file to the client
-            return send_file(
-                tmp_file_path, 
-                as_attachment=True, 
-                download_name=filename, 
-                mimetype="text/plain"
-            )
-        except Exception as e:
-            return f"Error generating TXT file: {e}", 500
+        # Create a BytesIO object and write the summary to it
+        file_data = BytesIO(summary.encode("utf-8"))
+        return send_file(
+            file_data, 
+            as_attachment=True, 
+            download_name=filename, 
+            mimetype="text/plain"
+        )
 
     elif file_type == 'pdf':
         try:
@@ -194,54 +166,9 @@ def download():
                 )
         except Exception as e:
             return f"Error generating PDF: {e}", 500
-=======
-        file_data = summary.encode("utf-8")  # Ensure proper encoding
-        return send_file(
-            BytesIO(file_data), 
-            as_attachment=True, 
-            download_name=filename, 
-            mimetype="text/plain"
-        )
-
-    elif file_type == 'pdf':
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15)
-        pdf.set_font("Arial", size=12)
-        pdf.multi_cell(0, 10, summary)
-
-        output = BytesIO()
-        pdf.output(output, 'F')  # Save to the BytesIO object
-        output.seek(0)  # Reset file pointer
-
-        return send_file(
-            output, 
-            as_attachment=True, 
-            download_name=filename, 
-            mimetype="application/pdf"
-        )
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 
     else:
         return "Invalid file type", 400
 
-<<<<<<< HEAD
 if __name__ == '__main__':
     app.run(debug=True)
-=======
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        session['user'] = request.form['username']
-        return redirect(url_for('index'))
-    return render_template('login.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        return redirect(url_for('login'))
-    return render_template('register.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c

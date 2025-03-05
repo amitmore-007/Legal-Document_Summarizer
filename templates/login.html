@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-<<<<<<< HEAD
 </head>
 <body>
     <h1>Login</h1>
@@ -18,20 +17,5 @@
         <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
-=======
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-   
-</head>
-<body>
-    <div class="container">
-        <h1>Login</h1>
-        <form action="/login" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
-    </div>
->>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 </body>
 </html>
