@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Summarizer</title>
+</head>
+<body>
+    <h1>Document Summarizer</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".pdf">
+        <button type="submit">Upload and Summarize</button>
+    </form>
+    {% if legal_text %}
+        <h2>Original Text</h2>
+        <pre>{{ legal_text }}</pre>
+    {% endif %}
+    {% if summary %}
+        <h2>Summary</h2>
+        <pre>{{ summary }}</pre>
+        <form method="POST" action="/download">
+            <input type="hidden" name="summary" value="{{ summary }}">
+            <select name="file_type">
+                <option value="txt">Text File</option>
+                <option value="pdf">PDF</option>
+            </select>
+            <button type="submit">Download Summary</button>
+        </form>
+    {% endif %}
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
