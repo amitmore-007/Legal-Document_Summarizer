@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Document Summarizer</title>
 </head>
 <body>
@@ -31,5 +32,41 @@
         </form>
     {% endif %}
     <a href="{{ url_for('logout') }}">Logout</a>
+=======
+    <title>Legal Document Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Legal Document Summarizer</h1>
+        <p>Upload a legal document (txt, docx, pdf) to summarize it.</p>
+
+        <!-- Form to upload the file -->
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".txt, .docx, .pdf" required>
+            <button type="submit">Summarize Document</button>
+        </form>
+
+        {% if legal_text %}
+        <div class="summary-section">
+            <h2>Original Document:</h2>
+            <textarea rows="10" readonly>{{ legal_text }}</textarea>
+            <h2>Summary:</h2>
+            <textarea rows="10" readonly>{{ summary }}</textarea>
+            
+            <h3>Download Summary As:</h3>
+            <form action="/download" method="POST">
+                <textarea name="summary" style="display: none">{{ summary }}</textarea>
+                <select name="file_type" required>
+                    <option value="txt">Text File (.txt)</option>
+                    <option value="docx">Word File (.docx)</option>
+                    <option value="pdf">PDF File (.pdf)</option>
+                </select>
+                <button type="submit">Download Summary</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+>>>>>>> 0227135ee4cc576d8aca4290daa406402737c90c
 </body>
 </html>
